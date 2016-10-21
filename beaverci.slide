@@ -101,8 +101,26 @@ Trigger is the event that triggers a new build
 - Cron
 - Other Trigger
 
-# Custom Trigger
+* TriggerParser
 
+  @TriggerParserClass('github')
+  class GitHubTriggerParser implements TriggerParser {
+    @override
+    Iterable<String> getMainEvents() {
+      return _eventMap.keys;
+    }
+
+    @override
+    ParsedTrigger parse(Context context, Trigger trigger) {
+      context.logger.fine('GitHubTriggerParser started.');
+      final event = _getEvent(trigger.headers, trigger.data);
+      final url = _getUrl(trigger.data);
+      return new ParsedTrigger(event, url, trigger.data);
+    }
+    ...
+  }
+
+- Can be added more!
 
 * How to Use
 
@@ -110,22 +128,27 @@ Trigger is the event that triggers a new build
 
 - Create a new Beaver CI
 
-  $ beaver_admin_cli setup -p gcloud_project -c credentials_path
+  $ beaver_admin_cli setup -c credentials_path cloud_project_name
 
 - Show the Beaver CI endpoint
 
-  $ beaver_admin_cli info
+  $ beaver_admin_cli describe cloud_project_name
   https://us-central1-beaver-ci.cloudfunctions.net/beaver
 
-* Beaer CI Client Setup
+* Beaver CI Client Setup
 
   $ beaver_cli setup https://us-central1-beaver-ci.cloudfunctions.net/beaver
 
 * Create Project
 
-  $ beaver_cli upload
-  Upoaded successfully!
-  Don't foget to add webhook https://us-central1-beaver-ci.cloudfunctions.net/beaver/github/beaver_demo \
+  $ beaver_cli create beaver_demo
+  Created successfully!
+
+* Upload Configuration
+
+  $ beaver_cli upload beaver.yaml
+  Uploaded successfully!
+  Don't forget to add webhook https://us-central1-beaver-ci.cloudfunctions.net/beaver/github/beaver_demo \
   to the GitHub repo "https://github.com/fluidic/beaver_demo"
 
 - beaver.yaml Configuration
@@ -143,6 +166,22 @@ Trigger is the event that triggers a new build
 
 - Add a webhook to GitHub repo
 
+* Test
+
+  $ beaver_cli test -t github -e push -d {...} beaver_demo
+  Success! Build Number = 0.
+
+* Get Results
+
+  $ beaver_cli get-results -b 0 beaver_demo
+  beaver_demo
+   - Build Number        : 0
+   - TaskInstance Status : success
+   - Task Status         : success
+   - Trigger Event       : github_event_create_branch
+   - Trigger URL         : https://github.com/fluidic/beaver
+   - Log                 : 
+
 * List Projects
 
   $ beaver_cli list
@@ -150,9 +189,18 @@ Trigger is the event that triggers a new build
   foo
   bar
 
-* Remove Project
+* Describe Project
 
-  $ beaver_cli unregister beaver_demo
+  $ beaver_cli describe beaver_demo
+  Configuration:
+    - ...
+    - ...
+
+* Delete Project
+
+  $ beaver_cli delete beaver_demo
+  Deleted successfully!
+
 
 * Plugin
 
