@@ -1,0 +1,159 @@
+Introduction to Beaver CI
+
+Fluidic
+dev@fluidic.io
+
+* Outline
+
+1. What is Beaver CI?
+2. Why Beaver CI?
+3. Background
+4. Key Features
+5. Core Concepts
+6. How to Use
+7. Plug-in
+8. Further Work
+
+* What is Beaver CI?
+
+- An open source serverless continuous integration and deployment framework
+- Runs on Amazon AWS, Microsoft Azure and Google Cloud Platform
+
+.image beaverci/BeaverCI_Final_01.png 300 _
+
+- [[https://github.com/fluidic/beaver]]
+
+* Why Beaver CI?
+
+- Pay as you go
+
+.image beaverci/BeaverCI_Final_02.png 400 _
+
+* Background
+
+AWS Lambda, Azure Functions, Google Cloud Functions
+
+- A lightweight compute solution for developers to create single-purpose, stand-alone functions that respond to Cloud events without the need to manage a server or runtime environmen
+.image beaverci/aws-lambda-banner.png 200 _
+- Beaver CI leverages these solutions
+
+* Key Features
+
+- On-demand build
+- Composable tasks
+- Easy to describe complex build pipeline
+- Pluggalbe architecture
+
+* Core Concepts
+
+- Project
+- Task
+- Trigger
+
+* Project
+
+- A collection of Triggers and Tasks
+
+* Task
+
+`Task` is an abstraction for build task that can be composited into a bigger task.
+
+- Function interface
+  typedef Future<Object> ExecuteFunc(Context context);
+
+- Class interface
+  abstract class Task {
+    Future<Object> execute(Context context);
+  }
+
+* Task Combinators
+
+Task provides combinators to create a compositie task out of exisiting tasks.
+
+- seq: executes asks sequentially
+- par: executes tasks in parallel
+
+  @TaskClass('my_task')
+  class MyTask implements Task {
+    MyTask.fromArgs(List<String> args);
+
+    @override
+    Future<Object> execute(Context context) => seq([
+          new InstallDartSdkTask(withContentShell: true, withDartium: true),
+          new PubTask(['get'], processWorkingDir: 'symbol'),
+          new PubTask(['run', 'test'], processWorkingDir: 'symbol')
+        ]).execute(context);
+  }
+
+* List of Tasks
+
+- Archive (gunzip, untar, ...)
+- File Operation (copy, delete, mkdir, ...)
+- HTTP (get, post, download)
+- Shell
+- Cloud (cloud storage, nosql database)
+
+* Trigger
+
+Trigger is the event that triggers a new build
+
+- GitHub: github_event_create, github_event_create_branch, github_event_create_tag, github_event_pull_request, github_event_push, ...
+- Cron
+- Other Trigger
+
+# Custom Trigger
+
+
+* How to Use
+
+* Beaver CI Cloud Setup
+
+- Create a new Beaver CI
+
+  $ beaver_admin_cli setup -p gcloud_project -c credentials_path
+
+- Show the Beaver CI endpoint
+
+  $ beaver_admin_cli info
+  https://us-central1-beaver-ci.cloudfunctions.net/beaver
+
+* Beaer CI Client Setup
+
+  $ beaver_cli setup https://us-central1-beaver-ci.cloudfunctions.net/beaver
+
+* Create Project
+
+  $ beaver_cli upload
+  Upoaded successfully!
+  Don't foget to add webhook https://us-central1-beaver-ci.cloudfunctions.net/beaver/github/beaver_demo \
+  to the GitHub repo "https://github.com/fluidic/beaver_demo"
+
+- beaver.yaml Configuration
+
+  project_name: beaver_demo
+  description: "Demo project for beaver-ci."
+
+  triggers:
+    - url: "https://github.com/fluidic/beaver_demo"
+      type: github
+      events: ["github_event_push"]
+      task:
+        name: my_build
+        args: ["beaver_demo", "trigger:head_commit.id"]
+
+- Add a webhook to GitHub repo
+
+* List Projects
+
+  $ beaver_cli list
+  beaver_demo
+  foo
+  bar
+
+* Remove Project
+
+  $ beaver_cli unregister beaver_demo
+
+* Plugin
+
+* Further Work
