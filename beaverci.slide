@@ -133,7 +133,15 @@ Trigger is the event that triggers a new build
 - Cron
 - Other Trigger
 
+Trigger consists of:
+
+- event
+- url
+- payload
+
 * TriggerParser
+
+`TriggerParser` create a trigger from the raw event.
 
   @TriggerParserClass('github')
   class GitHubTriggerParser implements TriggerParser {
