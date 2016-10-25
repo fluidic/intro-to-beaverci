@@ -141,7 +141,7 @@ Trigger consists of:
 
 * GitHub Push Payload Example
 
-.image beaverci/github_push_event.png 500 _ 
+.image beaverci/github_push_event.png 500 _
 
 Refer: https://developer.github.com/v3/activity/events/types/#pushevent
 
@@ -201,7 +201,7 @@ Refer: https://developer.github.com/v3/activity/events/types/#pushevent
       events: ["github_event_push"]
       task:
         name: my_build
-        args: ["beaver_demo", "trigger:.head_commit.id"]
+        args: ["beaver_demo", "trigger:payload.head_commit.id"]
 
 * Upload Configuration
 
@@ -222,7 +222,7 @@ Refer: https://developer.github.com/v3/activity/events/types/#pushevent
       - name: git
         args: ["clone", "trigger:url"]
       - name: git
-        args: ["checkout", "trigger:.head_commit.id"]
+        args: ["checkout", "trigger:payload.head_commit.id"]
       - name: pub
         args: ["get"]
       - name: pub
