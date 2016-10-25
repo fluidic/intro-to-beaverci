@@ -1,18 +1,30 @@
 Introduction to Beaver CI
 
 Fluidic
+October 25, 2016
 dev@fluidic.io
 
 * Outline
 
+0. What is CD/CD?
 1. What is Beaver CI?
 2. Why Beaver CI?
-3. Background
+3. Technical Background
 4. Key Features
 5. Core Concepts
 6. How to Use
 7. Plug-in
 8. Further Work
+
+* Waht is CI?
+
+.image http://cdn02.mindtheproduct.com/wp-content/uploads/2015/12/409-images-for-snap-blog-postedit_image1.png
+
+Source: http://www.mindtheproduct.com/2016/02/what-the-hell-are-ci-cd-and-devops-a-cheatsheet-for-the-rest-of-us/
+
+* What is CD?
+
+.image http://cdn02.mindtheproduct.com/wp-content/uploads/2015/12/409-images-for-snap-blog-postedit_image3-auto.png 500 _
 
 * What is Beaver CI?
 
@@ -25,11 +37,14 @@ dev@fluidic.io
 
 * Why Beaver CI?
 
-- Pay as you go
+Price!
+
+- Travis CI: $129 USD / month
+- Amazon EC2 instance m4.large (2vCPU, 8GiB Memory): $118.8 USD / month
 
 .image beaverci/BeaverCI_Final_02.png 400 _
 
-* Background
+* Technical Background
 
 AWS Lambda, Azure Functions, Google Cloud Functions
 
@@ -47,12 +62,28 @@ AWS Lambda, Azure Functions, Google Cloud Functions
 * Core Concepts
 
 - Project
+- Context
 - Task
 - Trigger
 
 * Project
 
 - A collection of Triggers and Tasks
+
+* Context
+
+- The context where a `Task` is executed
+- Provide access to cloud services such as database, storage and virtual machines
+
+  abstract class Context {
+    Config get config;
+    Logger get logger;
+    ContextPart getPart(String name);
+
+    Storage get storage;
+    DatastoreDB get db;
+    ComputeApi get compute;
+  }
 
 * Task
 
@@ -92,6 +123,7 @@ Task provides combinators to create a compositie task out of exisiting tasks.
 - HTTP (get, post, download)
 - Shell
 - Cloud (cloud storage, nosql database)
+- Slack, HipChat, Email notifications
 
 * Trigger
 
@@ -144,14 +176,7 @@ Trigger is the event that triggers a new build
   $ beaver_cli create beaver_demo
   Created successfully!
 
-* Upload Configuration
-
-  $ beaver_cli upload beaver.yaml
-  Uploaded successfully!
-  Don't forget to add webhook https://us-central1-beaver-ci.cloudfunctions.net/beaver/github/beaver_demo \
-  to the GitHub repo "https://github.com/fluidic/beaver_demo"
-
-- beaver.yaml Configuration
+* beaver.yaml Configuration
 
   project_name: beaver_demo
   description: "Demo project for beaver-ci."
@@ -164,9 +189,16 @@ Trigger is the event that triggers a new build
         name: my_build
         args: ["beaver_demo", "trigger:head_commit.id"]
 
+* Upload Configuration
+
+  $ beaver_cli upload beaver.yaml
+  Uploaded successfully!
+  Don't forget to add webhook https://us-central1-beaver-ci.cloudfunctions.net/beaver/github/beaver_demo \
+  to the GitHub repo "https://github.com/fluidic/beaver_demo"
+
 - Add a webhook to GitHub repo
 
-* More Configuration
+* More beaver.yaml Configurations
 
   - name: build_by_push
     type: github
@@ -184,7 +216,7 @@ Trigger is the event that triggers a new build
       - name: mail
         args: ["dev@fluidic.io"]
 
-*
+* More beaver.yaml Configurations
 
   - name: daily_build_by_cron
     type: cron
@@ -198,7 +230,7 @@ Trigger is the event that triggers a new build
       - name: mail
         args: ["dev@fluidic.io"]
 
-*
+* More beaver.yaml Configurations
 
   - name: sdk_version_check
     type: cron
@@ -222,7 +254,7 @@ Trigger is the event that triggers a new build
    - Task Status         : success
    - Trigger Event       : github_event_create_branch
    - Trigger URL         : https://github.com/fluidic/beaver
-   - Log                 : 
+   - Log                 :
 
 * List Projects
 
@@ -247,3 +279,6 @@ Trigger is the event that triggers a new build
 * Plugin
 
 * Further Work
+
+- Add more tasks
+- Support additional cloud service providers
