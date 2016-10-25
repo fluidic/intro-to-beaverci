@@ -139,6 +139,12 @@ Trigger consists of:
 - url
 - payload
 
+* GitHub Push Payload Example
+
+.image beaverci/github_push_event.png 500 _ 
+
+Refer: https://developer.github.com/v3/activity/events/types/#pushevent
+
 * TriggerParser
 
 `TriggerParser` create a trigger from the raw event.
