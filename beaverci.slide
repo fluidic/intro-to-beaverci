@@ -207,7 +207,7 @@ Refer: https://developer.github.com/v3/activity/events/types/#pushevent
 
 * Upload Configuration
 
-  $ beaver_cli upload beaver.yaml
+  $ beaver_cli upload -c beaver.yaml beaver_demo
   Uploaded successfully!
   Don't forget to add webhook https://us-central1-beaver-ci.cloudfunctions.net/beaver/github/beaver_demo \
   to the GitHub repo "https://github.com/fluidic/beaver_demo"
