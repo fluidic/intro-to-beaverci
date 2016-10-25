@@ -192,6 +192,15 @@ Refer: https://developer.github.com/v3/activity/events/types/#pushevent
   $ beaver_cli create beaver_demo
   Created successfully!
 
+* Upload Configuration
+
+  $ beaver_cli upload -c beaver.yaml beaver_demo
+  Uploaded successfully!
+  Don't forget to add webhook https://us-central1-beaver-ci.cloudfunctions.net/beaver/github/beaver_demo \
+  to the GitHub repo "https://github.com/fluidic/beaver_demo"
+
+- Add a webhook to GitHub repo
+
 * beaver.yaml Configuration
 
   project_name: beaver_demo
@@ -205,14 +214,6 @@ Refer: https://developer.github.com/v3/activity/events/types/#pushevent
         name: my_build
         args: ["beaver_demo", "trigger:payload.head_commit.id"]
 
-* Upload Configuration
-
-  $ beaver_cli upload -c beaver.yaml beaver_demo
-  Uploaded successfully!
-  Don't forget to add webhook https://us-central1-beaver-ci.cloudfunctions.net/beaver/github/beaver_demo \
-  to the GitHub repo "https://github.com/fluidic/beaver_demo"
-
-- Add a webhook to GitHub repo
 
 * More beaver.yaml Configurations
 
