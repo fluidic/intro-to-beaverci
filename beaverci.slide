@@ -201,7 +201,7 @@ Refer: https://developer.github.com/v3/activity/events/types/#pushevent
       events: ["github_event_push"]
       task:
         name: my_build
-        args: ["beaver_demo", "trigger:head_commit.id"]
+        args: ["beaver_demo", "trigger:.head_commit.id"]
 
 * Upload Configuration
 
