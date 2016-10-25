@@ -6,7 +6,7 @@ dev@fluidic.io
 
 * Outline
 
-0. What is CD/CD?
+0. What is CI/CD?
 1. What is Beaver CI?
 2. Why Beaver CI?
 3. Technical Background
@@ -57,7 +57,7 @@ AWS Lambda, Azure Functions, Google Cloud Functions
 - On-demand build
 - Composable tasks
 - Easy to describe complex build pipeline
-- Pluggalbe architecture
+- Pluggable architecture
 
 * Core Concepts
 
@@ -239,11 +239,6 @@ Trigger is the event that triggers a new build
           args: ["dart"]
         - name: trigger
           args: ["daily_build_by_cron"]
-
-* Test
-
-  $ beaver_cli test -t github -e push -d {...} beaver_demo
-  Success! Build Number = 0.
 
 * Get Results
 
