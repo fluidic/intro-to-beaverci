@@ -70,6 +70,8 @@ AWS Lambda, Azure Functions, Google Cloud Functions
 
 - A collection of Triggers and Tasks
 
+.image beaverci/pipeline.png 400 _
+
 * Context
 
 - The context where a `Task` is executed
